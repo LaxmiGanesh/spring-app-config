@@ -1,0 +1,124 @@
+Docker commands :
+
+pulling redis from docker registry :: docker pull redis
+
+1) docker images
+2) docker run --name redis-latest -d redis [ name is called container]
+
+--> docker run --name redis-latest -d redis:latest [ repositry:tagname]
+
+
+3) docker ps ( it will show list of containers)
+
+4) stop container 
+
+docker stop [containerId/name of the container]
+
+5) if you want to see all containers in your system means those are there but not running
+
+docker ps -a
+
+6) how to start container
+
+docker start container_id
+
+7) remove container
+
+docker rm container_id
+
+8) exposed with custom port id in host machine.
+
+docker run --name redis-latest -p6379:6379 -d redis:latest
+
+9) docker pull redis:6.2.7
+
+10) docker --help
+
+11) docker run --help
+12) docker images -a
+13) docker inspect f8528f17261c [ image_id/containerid]
+14) docker logs container_id
+
+15) go to inside particular container id and perform actions
+
+docker exec -it f861e03d2ef9 /bin/sh
+
+ls
+pwd
+cd ..
+pwd
+redis-cli
+exit [to come out for redis cli]
+exit [from container inside to outside]
+
+16)docker system prune -a [ it will delete all the images in a system]
+
+
+17) Build image
+
+docker build -t ganesh6973/serviceregistry:0.0.1 . [ repositry_name/image_name:version] here " . " represents current directory
+
+18) run my service registry image :
+
+docker run -d -p8761:8761 --name serviceregistry b21e3dcd71fe [ image_id]
+
+19) build config server image :
+
+docker build -t ganesh6973/configserver:0.0.1  -t ganesh6973/configserver:latest . [ giving multiple tags here]
+
+20) run configserver image
+
+docker run -d -p9296:9296 --name configserver d6fa5f34d2b4
+
+docker run -d -p9296:9296 -e EUREKA_SERVER_ADDRESS=http://host.docker.internal:8761/eureka  --name configserver d6fa5f34d2b4
+
+21) build cloud gateway images :
+
+docker build -t ganesh6973/cloudgateway:latest .
+
+22) run cloudgateway image :
+
+docker run -d -p7070:7070 -e CONFIG_SERVER_URI=host.docker.internal -e EUREKA_SERVER_ADDRESS=http://host.docker.internal:8761/eureka  --name cloudgateway 6fa9fe85d972
+
+21) build paymentservice images :
+
+docker build -t ganesh6973/paymentservice:latest . 
+
+22) run paymentservice image :
+
+docker run -d -p8083:8083 -e DB_HOST=host.docker.internal -e CONFIG_SERVER_URL=host.docker.internal -e EUREKA_SERVER_ADDRESS=http://host.docker.internal:8761/eureka  --name paymentservice 4baaacd112ef
+
+21) build productservice images :
+
+docker build -t ganesh6973/productservice:latest . 
+
+24) run productservice image : 
+docker run -d -p8081:8081 -e DB_HOST=host.docker.internal -e CONFIG_SERVER_URL=host.docker.internal -e EUREKA_SERVER_ADDRESS=http://host.docker.internal:8761/eureka  --name productservice ddf80ee2d34a
+
+21) build Order Service images :
+
+docker build -t ganesh6973/orderservice:latest . 
+
+24) run productservice image : 
+docker run -d -p8082:8082 -e DB_HOST=host.docker.internal -e CONFIG_SERVER_URL=host.docker.internal -e EUREKA_SERVER_ADDRESS=http://host.docker.internal:8761/eureka  --name orderservice 7e40c4986c00
+
+
+
+
+
+25) for docker login ::
+
+docekr login -u username -p paswword
+
+26) pushing docker images to docker hub ::
+
+docker push remositoryname:latest
+
+
+27) Run the docker compose yaml file
+
+docker-compose -f docker-compose.yml up -d
+
+27) down the all congainers
+
+docker-compose -f docker-compose.yml down
